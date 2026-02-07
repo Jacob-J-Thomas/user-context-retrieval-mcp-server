@@ -15,16 +15,16 @@ jobs:
         include:
           - os: windows-latest
             rid: win-x64
-            artifact: UserContextRetrievalMcpServer-win-x64
+            artifact: UserPromptMcpServer-win-x64
           - os: ubuntu-latest
             rid: linux-x64
-            artifact: UserContextRetrievalMcpServer-linux-x64
+            artifact: UserPromptMcpServer-linux-x64
           - os: macos-latest
             rid: osx-x64
-            artifact: UserContextRetrievalMcpServer-osx-x64
+            artifact: UserPromptMcpServer-osx-x64
           - os: macos-latest
             rid: osx-arm64
-            artifact: UserContextRetrievalMcpServer-osx-arm64
+            artifact: UserPromptMcpServer-osx-arm64
 
     runs-on: ${{ matrix.os }}
 
@@ -38,9 +38,10 @@ jobs:
 
       - name: Publish
         run: >
-          dotnet publish UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.csproj
+          dotnet publish UserPromptMcpServer/UserPromptMcpServer.csproj
           -c Release
           -r ${{ matrix.rid }}
+          --self-contained
           -o ./publish/${{ matrix.artifact }}
 
       - name: Zip artifacts (Windows)

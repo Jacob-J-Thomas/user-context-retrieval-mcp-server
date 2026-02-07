@@ -5,14 +5,14 @@ using System.Text;
 using System.Text.Json;
 using ModelContextProtocol.Server;
 
-namespace UserContextRetrievalMcpServer.Tools;
+namespace UserPromptMcpServer.Tools;
 
 [McpServerToolType]
-public sealed class UserContextRetrievalTool
+public sealed class UserPromptTool
 {
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(10);
 
-    [McpServerTool(Name = "user_context_retrieval")]
+    [McpServerTool(Name = "user_prompt")]
     [Description(
         "Presents questions to the user in a new terminal window and returns their answers. " +
         "Use this tool when you encounter ambiguous requirements, need design decisions clarified, " +
@@ -32,7 +32,7 @@ public sealed class UserContextRetrievalTool
         }
 
         var sessionId = Guid.NewGuid().ToString("N");
-        var tempDir = Path.Combine(Path.GetTempPath(), "UserContextRetrievalMcpServer", sessionId);
+        var tempDir = Path.Combine(Path.GetTempPath(), "UserPromptMcpServer", sessionId);
         Directory.CreateDirectory(tempDir);
 
         var questionsFile = Path.Combine(tempDir, "questions.json");

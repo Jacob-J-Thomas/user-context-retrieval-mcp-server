@@ -1,4 +1,4 @@
-# User Context Retrieval MCP Server
+# User Prompt MCP Server
 
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
@@ -11,7 +11,7 @@ Long-running AI agents (like [Claude Code](https://docs.anthropic.com/en/docs/cl
 
 ## The Solution
 
-This MCP server exposes a single tool, `user_context_retrieval`, that an AI agent can call at any point during execution. When invoked, a **new terminal window** opens on the user's machine displaying the agent's questions. The user types their answers and the responses are returned directly to the agent, allowing it to continue working with the additional context.
+This MCP server exposes a single tool, `user_prompt`, that an AI agent can call at any point during execution. When invoked, a **new terminal window** opens on the user's machine displaying the agent's questions. The user types their answers and the responses are returned directly to the agent, allowing it to continue working with the additional context.
 
 ![Terminal prompt demo](./demo.png)
 
@@ -29,53 +29,109 @@ This MCP server exposes a single tool, `user_context_retrieval`, that an AI agen
 - **Windows**: PowerShell 5.1+ (included with Windows 10/11)
 - **macOS/Linux** *(untested)*: [PowerShell Core (`pwsh`)](https://github.com/PowerShell/PowerShell#get-powershell) must be installed
 
-> **Note:** If you use a [pre-built release](#option-1-download-a-pre-built-release-recommended), no other dependencies are required. Building from source requires the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later.
+> **Note:** [Pre-built releases](#option-a-github-releases-recommended) have no other dependencies. The [.NET Global Tool](#option-b-net-global-tool) and [Build from Source](#option-c-build-from-source) options require the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later.
 
-## Installation
+## Quick Start
 
-### Option 1: Download a Pre-built Release (Recommended)
+Pick **one** of the three install options below. Each option walks you through installation, client configuration, and updates end-to-end.
 
-Self-contained executables are available on the [Releases](https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server/releases) page. No .NET SDK required.
+---
 
-1. Download the zip for your platform from the [latest release](https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server/releases/latest):
+### Option A: GitHub Releases
 
-   | Platform             | Asset |
-   |----------------------|-------|
-   | Windows (x64)        | `UserContextRetrievalMcpServer-win-x64.zip` |
-   | macOS (Intel)        | `UserContextRetrievalMcpServer-osx-x64.zip` |
-   | macOS (Apple Silicon) | `UserContextRetrievalMcpServer-osx-arm64.zip` |
-   | Linux (x64)          | `UserContextRetrievalMcpServer-linux-x64.zip` |
+Self-contained executables — no .NET SDK required.
 
-2. Extract the zip to a permanent location, for example:
+**1. Download**
 
-   - **Windows**: `C:\Tools\UserContextRetrievalMcpServer\`
-   - **macOS / Linux**: `~/tools/UserContextRetrievalMcpServer/`
+Grab the zip for your platform from the [latest release](https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server/releases/latest):
 
-3. Continue to the [Configuration](#configuration) section below to register the server with your MCP client.
+| Platform              | Asset                                    |
+|-----------------------|------------------------------------------|
+| Windows (x64)         | `UserPromptMcpServer-win-x64.zip`        |
+| macOS (Intel)         | `UserPromptMcpServer-osx-x64.zip`        |
+| macOS (Apple Silicon) | `UserPromptMcpServer-osx-arm64.zip`      |
+| Linux (x64)           | `UserPromptMcpServer-linux-x64.zip`      |
 
-### Option 2: Build from Source
+**2. Extract**
+
+Unzip to a permanent location, for example:
+
+- **Windows**: `C:\Tools\UserPromptMcpServer\`
+- **macOS / Linux**: `~/tools/UserPromptMcpServer/`
+
+**3. Configure your MCP client**
+
+**Claude Code (CLI):**
+
+```bash
+claude mcp add user-prompt -- "C:\Tools\UserPromptMcpServer\UserPromptMcpServer.exe"
+```
+
+**Other clients** — point the command at the executable (see [Client Configuration Reference](#client-configuration-reference) for full examples):
+
+```json
+{
+  "command": "C:\\Tools\\UserPromptMcpServer\\UserPromptMcpServer.exe"
+}
+```
+
+**Updating:** download the new release and replace the files in the same folder.
+
+---
+
+### Option B: .NET Global Tool
+
+Requires the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later. The tool is added to your PATH automatically.
+
+**1. Install**
+
+```bash
+dotnet tool install -g UserPrompt
+```
+
+**2. Configure your MCP client**
+
+**Claude Code (CLI):**
+
+```bash
+claude mcp add user-prompt -- user-prompt
+```
+
+**Other clients** — the command name is `user-prompt` (see [Client Configuration Reference](#client-configuration-reference) for full examples):
+
+```json
+{
+  "command": "user-prompt"
+}
+```
+
+**Updating:**
+
+```bash
+dotnet tool update -g UserPrompt
+```
+
+---
+
+### Option C: Build from Source
 
 Requires the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later.
 
 ```bash
 git clone https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server.git
 cd user-context-retrieval-mcp-server
-dotnet publish UserContextRetrievalMcpServer -c Release -r win-x64 -o ./publish
+dotnet publish UserPromptMcpServer -c Release -r win-x64 -o ./publish
 ```
 
 > Replace `win-x64` with your platform's [runtime identifier](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog) (e.g. `osx-arm64`, `linux-x64`).
 
-## Configuration
+Then configure your client the same way as [Option A](#option-a-github-releases-recommended), pointing at the executable inside `./publish/`.
 
-This server uses the **stdio** transport — it does not listen on a port. The MCP client (e.g., Claude Code) launches the server process and communicates with it over stdin/stdout.
+---
 
-In every example below, replace the path with the actual location of your extracted or published executable.
+## Client Configuration Reference
 
-### Claude Code (CLI)
-
-```bash
-claude mcp add user-context-retrieval -- /path/to/UserContextRetrievalMcpServer.exe
-```
+This server uses the **stdio** transport — it does not listen on a port. The MCP client launches the server process and communicates with it over stdin/stdout. Replace the command/path below with the value from whichever install option you chose.
 
 ### Claude Desktop
 
@@ -84,8 +140,8 @@ Add the following to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "user-context-retrieval": {
-      "command": "/path/to/UserContextRetrievalMcpServer.exe"
+    "user-prompt": {
+      "command": "/path/to/UserPromptMcpServer.exe"
     }
   }
 }
@@ -105,8 +161,8 @@ Add the following to `.cursor/mcp.json` (project-level) or `~/.cursor/mcp.json` 
 ```json
 {
   "mcpServers": {
-    "user-context-retrieval": {
-      "command": "/path/to/UserContextRetrievalMcpServer.exe"
+    "user-prompt": {
+      "command": "/path/to/UserPromptMcpServer.exe"
     }
   }
 }
@@ -117,27 +173,27 @@ Add the following to `.cursor/mcp.json` (project-level) or `~/.cursor/mcp.json` 
 Add the following to `~/.codex/config.toml` (global) or `.codex/config.toml` (project-level):
 
 ```toml
-[mcp_servers.user-context-retrieval]
-command = "/path/to/UserContextRetrievalMcpServer.exe"
+[mcp_servers.user-prompt]
+command = "/path/to/UserPromptMcpServer.exe"
 ```
 
 Or via the CLI:
 
 ```bash
-codex mcp add user-context-retrieval -- /path/to/UserContextRetrievalMcpServer.exe
+codex mcp add user-prompt -- /path/to/UserPromptMcpServer.exe
 ```
 
 ### Other MCP Clients
 
-Any MCP client that supports the stdio transport can launch this server. Point it at the executable.
+Any MCP client that supports the stdio transport can launch this server. Point it at the executable (or the `user-prompt` command name if using the .NET Global Tool).
 
 ## Usage
 
-Once configured, the `user_context_retrieval` tool is available to the AI agent automatically. The agent decides when to invoke it based on its own judgment — no manual triggering is required.
+Once configured, the `user_prompt` tool is available to the AI agent automatically. The agent decides when to invoke it based on its own judgment — no manual triggering is required.
 
 ### Tool Reference
 
-**Tool name:** `user_context_retrieval`
+**Tool name:** `user_prompt`
 
 | Parameter   | Type       | Required | Description |
 |-------------|------------|----------|-------------|
@@ -148,7 +204,7 @@ Once configured, the `user_context_retrieval` tool is available to the AI agent 
 
 ```json
 {
-  "name": "user_context_retrieval",
+  "name": "user_prompt",
   "arguments": {
     "reason": "The project has no database configuration and I need to set one up.",
     "questions": [
@@ -186,11 +242,11 @@ If the user does not respond within **10 minutes**, or closes the window without
 ## Architecture
 
 ```
-UserContextRetrievalMcpServer/
-├── UserContextRetrievalMcpServer.csproj   # Project file (.NET 8)
-├── Program.cs                              # MCP server entry point (stdio transport)
+UserPromptMcpServer/
+├── UserPromptMcpServer.csproj   # Project file (.NET 8)
+├── Program.cs                   # MCP server entry point (stdio transport)
 └── Tools/
-    └── UserContextRetrievalTool.cs         # Tool implementation
+    └── UserPromptTool.cs        # Tool implementation
 ```
 
 ### How It Works Internally
@@ -202,7 +258,7 @@ UserContextRetrievalMcpServer/
 5. Answers are written to a response JSON file; the terminal closes
 6. The server reads the response file, formats it, cleans up temp files, and returns the result over stdout
 
-All temporary files are created under `%TEMP%/UserContextRetrievalMcpServer/<session-guid>/` and are cleaned up after each invocation regardless of outcome.
+All temporary files are created under `%TEMP%/UserPromptMcpServer/<session-guid>/` and are cleaned up after each invocation regardless of outcome.
 
 ## Contributing
 
@@ -219,8 +275,8 @@ Contributions are welcome! To make sure your change gets merged, please **open a
 ```bash
 git clone https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server.git
 cd user-context-retrieval-mcp-server
-dotnet restore UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.csproj
-dotnet build UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.csproj
+dotnet restore UserPromptMcpServer/UserPromptMcpServer.csproj
+dotnet build UserPromptMcpServer/UserPromptMcpServer.csproj
 ```
 
 ### Areas for Contribution
