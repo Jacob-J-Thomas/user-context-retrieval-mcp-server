@@ -26,40 +26,55 @@ This MCP server exposes a single tool, `user_context_retrieval`, that an AI agen
 
 ## Prerequisites
 
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
 - **Windows**: PowerShell 5.1+ (included with Windows 10/11)
 - **macOS/Linux** *(untested)*: [PowerShell Core (`pwsh`)](https://github.com/PowerShell/PowerShell#get-powershell) must be installed
 
+> **Note:** If you use a [pre-built release](#option-1-download-a-pre-built-release-recommended), no other dependencies are required. Building from source requires the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later.
+
 ## Installation
 
-### Clone the Repository
+### Option 1: Download a Pre-built Release (Recommended)
+
+Self-contained executables are available on the [Releases](https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server/releases) page. No .NET SDK required.
+
+1. Download the zip for your platform from the [latest release](https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server/releases/latest):
+
+   | Platform             | Asset |
+   |----------------------|-------|
+   | Windows (x64)        | `UserContextRetrievalMcpServer-win-x64.zip` |
+   | macOS (Intel)        | `UserContextRetrievalMcpServer-osx-x64.zip` |
+   | macOS (Apple Silicon) | `UserContextRetrievalMcpServer-osx-arm64.zip` |
+   | Linux (x64)          | `UserContextRetrievalMcpServer-linux-x64.zip` |
+
+2. Extract the zip to a permanent location, for example:
+
+   - **Windows**: `C:\Tools\UserContextRetrievalMcpServer\`
+   - **macOS / Linux**: `~/tools/UserContextRetrievalMcpServer/`
+
+3. Continue to the [Configuration](#configuration) section below to register the server with your MCP client.
+
+### Option 2: Build from Source
+
+Requires the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later.
 
 ```bash
 git clone https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server.git
 cd user-context-retrieval-mcp-server
+dotnet publish UserContextRetrievalMcpServer -c Release -r win-x64 -o ./publish
 ```
 
-### Build
-
-```bash
-dotnet build UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.csproj
-```
+> Replace `win-x64` with your platform's [runtime identifier](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog) (e.g. `osx-arm64`, `linux-x64`).
 
 ## Configuration
 
 This server uses the **stdio** transport — it does not listen on a port. The MCP client (e.g., Claude Code) launches the server process and communicates with it over stdin/stdout.
 
+In every example below, replace the path with the actual location of your extracted or published executable.
+
 ### Claude Code (CLI)
 
 ```bash
-claude mcp add user-context-retrieval -- dotnet run --project /path/to/user-context-retrieval-mcp-server/UserContextRetrievalMcpServer
-```
-
-Or, for faster startup, publish first and point to the executable:
-
-```bash
-dotnet publish UserContextRetrievalMcpServer -c Release -o ./publish
-claude mcp add user-context-retrieval -- /path/to/user-context-retrieval-mcp-server/publish/UserContextRetrievalMcpServer.exe
+claude mcp add user-context-retrieval -- /path/to/UserContextRetrievalMcpServer.exe
 ```
 
 ### Claude Desktop
@@ -70,12 +85,7 @@ Add the following to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "user-context-retrieval": {
-      "command": "dotnet",
-      "args": [
-        "run",
-        "--project",
-        "/path/to/user-context-retrieval-mcp-server/UserContextRetrievalMcpServer"
-      ]
+      "command": "/path/to/UserContextRetrievalMcpServer.exe"
     }
   }
 }
@@ -96,8 +106,7 @@ Add the following to `.cursor/mcp.json` (project-level) or `~/.cursor/mcp.json` 
 {
   "mcpServers": {
     "user-context-retrieval": {
-      "command": "dotnet",
-      "args": ["run", "--project", "/path/to/UserContextRetrievalMcpServer"]
+      "command": "/path/to/UserContextRetrievalMcpServer.exe"
     }
   }
 }
@@ -109,19 +118,18 @@ Add the following to `~/.codex/config.toml` (global) or `.codex/config.toml` (pr
 
 ```toml
 [mcp_servers.user-context-retrieval]
-command = "dotnet"
-args = ["run", "--project", "/path/to/UserContextRetrievalMcpServer"]
+command = "/path/to/UserContextRetrievalMcpServer.exe"
 ```
 
 Or via the CLI:
 
 ```bash
-codex mcp add user-context-retrieval -- dotnet run --project /path/to/UserContextRetrievalMcpServer
+codex mcp add user-context-retrieval -- /path/to/UserContextRetrievalMcpServer.exe
 ```
 
 ### Other MCP Clients
 
-Any MCP client that supports the stdio transport can launch this server. Point it at the built executable or use `dotnet run` with the project path.
+Any MCP client that supports the stdio transport can launch this server. Point it at the executable.
 
 ## Usage
 
