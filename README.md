@@ -1,7 +1,7 @@
 # User Context Retrieval MCP Server
 
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
-![License](https://img.shields.io/badge/license-TBD-lightgrey)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that gives AI agents the ability to ask users clarifying questions mid-task via a pop-up terminal window. Built with .NET 8 and C#.
 
@@ -13,7 +13,7 @@ Long-running AI agents (like [Claude Code](https://docs.anthropic.com/en/docs/cl
 
 This MCP server exposes a single tool, `user_context_retrieval`, that an AI agent can call at any point during execution. When invoked, a **new terminal window** opens on the user's machine displaying the agent's questions. The user types their answers and the responses are returned directly to the agent, allowing it to continue working with the additional context.
 
-![Terminal prompt demo](docs/images/demo.png)
+![Terminal prompt demo](./demo.png)
 
 ## Features
 
@@ -215,9 +215,6 @@ dotnet restore UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.cspro
 dotnet build UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.csproj
 ```
 
-<!-- TODO: Add instructions for running tests once a test project exists -->
-<!-- TODO: Add linting / formatting standards (e.g., dotnet format, .editorconfig) -->
-
 ### Areas for Contribution
 
 - **Cross-platform support** — the macOS and Linux terminal launching is currently stubbed out and untested
@@ -226,16 +223,7 @@ dotnet build UserContextRetrievalMcpServer/UserContextRetrievalMcpServer.csproj
 
 ## License
 
-<!-- TODO: Choose a license. The desired model is "free for non-commercial use, paid license required for commercial use." Standard OSS licenses (MIT, Apache 2.0) do not support this. Options to consider:
-
-1. **PolyForm Noncommercial 1.0** — clean, purpose-built for this exact model (https://polyformproject.org/licenses/noncommercial/1.0.0/)
-2. **Business Source License (BSL 1.1)** — used by MariaDB, Sentry, etc. Restricts commercial use for a defined period then converts to an open license
-3. **Commons Clause** applied to MIT or Apache 2.0 — adds a commercial restriction on top of a permissive base license
-4. **Custom dual license** — e.g., "free under MIT for non-commercial; contact author for commercial licensing"
-
-Once chosen, add a LICENSE file to the repository root and update this section. -->
-
-This project is licensed under the **[TODO: License Name]**. See [LICENSE](LICENSE) for details.
+This project is licensed under the **[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)**. See [LICENSE](LICENSE) for details.
 
 ## Author
 
