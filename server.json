@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.jacob-j-thomas/user-prompt",
+  "description": "An MCP server that enables AI agents to ask users clarifying questions via pop-up terminal windows.",
+  "repository": {
+    "url": "https://github.com/Jacob-J-Thomas/user-context-retrieval-mcp-server",
+    "source": "github"
+  },
+  "version": "1.0.1",
+  "packages": [
+    {
+      "registryType": "nuget",
+      "identifier": "UserPrompt",
+      "version": "1.0.1",
+      "runtimeHint": "dnx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
