@@ -9,10 +9,10 @@
   "version": "1.0.1",
   "packages": [
     {
-      "registryType": "nuget",
+      "registry_type": "nuget",
       "identifier": "UserPrompt",
       "version": "1.0.1",
-      "runtimeHint": "dnx",
+      "runtime_hint": "dnx",
       "transport": {
         "type": "stdio"
       }
