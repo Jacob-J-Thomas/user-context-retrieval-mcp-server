@@ -16,7 +16,7 @@
 
     <!-- NuGet package metadata -->
     <PackageId>UserPrompt</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.2</Version>
     <Authors>Jacob Thomas</Authors>
     <Description>An MCP server that enables AI agents to ask users clarifying questions via pop-up terminal windows.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
