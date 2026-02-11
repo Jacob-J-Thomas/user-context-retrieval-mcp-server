@@ -3,6 +3,8 @@
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
+mcp-name: io.github.Jacob-J-Thomas/user-prompt
+
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that gives AI agents the ability to ask users clarifying questions mid-task via a pop-up terminal window. Built with .NET 8 and C#.
 
 ## The Problem
